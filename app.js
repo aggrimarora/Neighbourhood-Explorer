@@ -1,109 +1,39 @@
 let map;
-    let marker;
-    let infoPane;
-    let request;
-    let service;
-    let infoWindow;
-    let initial = [];
-    let info = "";
-    let currentInfoWindow;
-    let directionService;
-    let directionRenderer;
-    let distanceService;
-    let room;
-    let bounds;
-    let infowindow_route;
-    let currentMode;
-    let selectedMode;
-    let selectedIcon;
-    let placeAddress;
-    let check;
-    let doorWidth;
-    let doorHeight;
-    let iconWidth;
-    let iconHeight;
-    let scaledWidth;
-    let scaledHeight;
-
-    var neighbourhood = {
-      "restaurant": "https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Restaurant_Map.png/:/rs=w:1440,h:1440",
-      "cafe": "https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Cafe_Map.png/:/rs=w:1440,h:1440",
-      "grocery": "https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Grocery_Map.png/:/rs=w:1440,h:1440",
-      "hospital": "https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Hospital_Map.png/:/rs=w:1440,h:1440",
-      "pharmacy": "https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Pharma_Map.png/:/rs=w:1440,h:1440",
-      "night club": "https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Club_Map.png/:/rs=w:1440,h:1440",
-      "cineplex": "https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Cinema_Map.png/:/rs=w:1440,h:1440",
-      "gym": "https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Fitness_Map.png/:/rs=w:1440,h:1440",
-      "default": "https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/default.png/:/rs=w:1440,h:1440",
-      "TTC": "https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Transit_Map.png/:/rs=w:1440,h:1440"
-    };
-
-    var category = {
-      "restaurant": "Restaurant",
-      "cafe": "Cafe",
-      "grocery": "Grocery",
-      "hospital": "Hospital",
-      "pharmacy": "Pharmacy",
-      "night club": "Club",
-      "cineplex": "Cineplex",
-      "gym": "Fitness",
-      "TTC": "Transit"
-    }
-    let searchedPlace;
+let marker;
+let infoPane;
+let infoWindow;
+let initial = [];
+let currentInfoWindow;
+let bounds;
+let currentMode;
+let selectedMode;
+let selectedIcon;
+let check;
+let placeAddress;
+let searchedPlace;
 
     //initialize the map with markers and various services(direction, places, etc)
     function initMap() {
-      if(window.innerWidth <= 768) {
-        doorHeight = 27.5;
-        doorWidth = 35;
-        iconHeight = 25;
-        iconWidth = 25;
-        scaledHeight = 30;
-        scaledWidth = 30;
-        console.log(window.innerWidth);
-      }
-      else {
-        doorHeight = 40;
-        doorWidth = 50;
-        iconHeight = 35;
-        iconWidth = 35;
-        scaledHeight = 45;
-        scaledWidth = 45;
-      }
-      var check = 0;
-      var m = new google.maps.LatLng(1,2);
-      currentMode = "driving";
+      currentMode = travelMode.driving;
       selectedMode = google.maps.DirectionsTravelMode.DRIVING;
       map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 43.642001, lng: -79.411965 },
+        center: roomCoordinates,
         zoom: 14,
         style: "hide",
         gestureHandling: "greedy",
         zoomControl: "true"
       });
       infoWindow = new google.maps.InfoWindow();
-
+      
       currentInfoWindow = infoWindow;
-      room = {lat: 43.642001, lng: -79.411965};
       var icon = {
-        url: "https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/door.png/:/rs=w:1440,h:1440",
+        url: "./room.png",
         origin: new google.maps.Point(0,0),
         anchor: new google.maps.Point(17,34),
         scaledSize: new google.maps.Size(doorWidth,doorHeight)
       }
-      marker = new google.maps.Marker({position: room, map: map,
-      animation: google.maps.Animation.DROP, icon: icon, title: "SoulRoom"});
-      marker.addListener("mouseover", () => {
-
-        var content = "<div class=\"infowindow\"><h6>Liberty SoulRooms<h6><p>State of the art condos, located in a chic neighbourhood, home to those who love to live, work and play in the urban core of Toronto.</p></div>"
-        infoWindow.setContent(content);
-        if(currentInfoWindow != null) currentInfoWindow.close();
-        infoWindow.open(marker.map, marker);
-        currentInfoWindow = infoWindow;
-      })
-      marker.addListener("mouseout", () => {
-        currentInfoWindow.close();
-      });
+      marker = new google.maps.Marker({position: roomCoordinates, map: map,
+      animation: google.maps.Animation.DROP, icon: icon, title: "Room"});
       infoPane = document.getElementById("panel");
       const styles = {
         hide: [
@@ -119,7 +49,7 @@ let map;
       var input = document.getElementsByClassName("input")[0];
       var searchBox = new google.maps.places.SearchBox(input);
       bounds = new google.maps.LatLngBounds();
-      bounds.extend(room);
+      bounds.extend(roomCoordinates);
       //Direction Service --------------------------------------
       directionService = new google.maps.DirectionsService();
       directionRenderer = new google.maps.DirectionsRenderer();
@@ -133,11 +63,6 @@ let map;
         if(places.length == 0 || places.length > 1) {
           return;
         }
-        else {
-          places.forEach(function(place) {
-
-          });
-        }
         initial.forEach(function(marker) {
           marker.setMap(null);
         });
@@ -148,14 +73,15 @@ let map;
       });
     }
 
-    //calculates route from soulroom to search result
+    let infowindow_route;
+    //calculates route from placee to search result
     function calcRoute(place) {
       searchedPlace = place;
       if(currentInfoWindow != null) currentInfoWindow.close();
       var end = place.geometry.location;
       var routeRequest = {
           travelMode: selectedMode,
-          origin: room,
+          origin: roomCoordinates,
           destination: end
       }
       directionService.route(routeRequest, function(response, status) {
@@ -176,17 +102,17 @@ let map;
       if(!results.contains("hidden")) results.add("hidden");
     }
 
+    let service;
     //searches nearbh results for a particular category
     function findNearby(place) {
       var heading = document.getElementsByClassName("search-heading")[0];
       heading.innerHTML  = "Top Results for <i>\"" + category[place.value] + "\"</i>";
-      bounds.extend(room);
+      bounds.extend(roomCoordinates);
       selectedIcon = place.value;
       service = new google.maps.places.PlacesService(map);
       service.nearbySearch({
-        location: { lat: 43.642001, lng: -79.411965 },
+        location: roomCoordinates,
         rankBy: google.maps.places.RankBy.DISTANCE,
-        // radius: 1500,
         keyword: place.value
       }, callback);
       document.getElementById("right-panel").classList.remove("hidden");
@@ -216,7 +142,7 @@ let map;
 
     //get distance between room and place you searched for
     function distanceTwoPoints(point){
-      var origin = new google.maps.LatLng(room.lat, room.lng);
+      var origin = new google.maps.LatLng(roomCoordinates.lat, roomCoordinates.lng);
       return (google.maps.geometry.spherical.computeDistanceBetween(origin, point) / 1000); //dividing by 1000 to get Kilometers
     }
 
@@ -227,8 +153,8 @@ let map;
         }
         initial = [];
         bounds = new google.maps.LatLngBounds();
-        bounds.extend(room);
-        map.setCenter(room);
+        bounds.extend(roomCoordinates);
+        map.setCenter(roomCoordinates);
         if(check == 1) {
           document.getElementById("right-panel").classList.add("hidden");
         }
@@ -255,8 +181,6 @@ let map;
       });
       createListItem(place, list, marker);
 
-      var infoWindow = new google.maps.InfoWindow();
-
       marker.addListener('mouseover', () => {
         var icon = {
           url: neighbourhood[selectedIcon],
@@ -266,10 +190,6 @@ let map;
           strokeColor: "black"
         }
         marker.setIcon(icon)
-        let request = {
-          placeId: place.place_id,
-          fields: ['name', 'formatted_address', 'geometry', 'rating', 'website', 'photos']
-        };
       })
 
       marker.addListener('mouseout', () => {
@@ -285,14 +205,14 @@ let map;
       google.maps.event.addListener(marker, 'click', function() {
         let request = {
           placeId: place.place_id,
-          fields: ['name', 'formatted_address', 'geometry', 'rating', 'website', 'photos']
+          fields
         };
 
         service.getDetails(request, (placeResult, status) => {
           showDetails(placeResult, marker, status);
           var routeRequest = {
               travelMode: selectedMode,
-              origin: room,
+              origin: roomCoordinates,
               destination: marker.position
           }
           directionService.route(routeRequest, function(response, status) {
@@ -331,10 +251,9 @@ let map;
       li.onclick = function(li) {
         initial.forEach(function(marker) {
           if(marker.get('title') == place.name) {
-            // showDetails(place, marker, google.maps.places.PlacesServiceStatus.OK);
             var routeRequest = {
                 travelMode: selectedMode,
-                origin: room,
+                origin: roomCoordinates,
                 destination: marker.position
             }
             directionService.route(routeRequest, function(response, status) {
@@ -359,11 +278,6 @@ let map;
 
      function updateDistance(li, place, content, marker) {
       var list = document.getElementById("places");
-      var routeRequest = {
-          travelMode: selectedMode,
-          origin: room,
-          destination: place.geometry.location
-      }
       var d = distanceTwoPoints(place.geometry.location);
       content = content + "<span class=\"address\">" + d.toFixed(2) + "<span class=\"unit\"> km</span>" + "</span></p></div>";
       li.innerHTML = content;
@@ -379,6 +293,7 @@ let map;
 
     //set content of infowindows for markers
     function showDetails(placeResult, marker, status) {
+      let info;
       if (currentInfoWindow != null) {
         info = "";
       }
@@ -404,13 +319,13 @@ let map;
         document.getElementById(currentMode).style.backgroundColor = "#eeeeee";
         document.getElementById(mode.id).style.backgroundColor = "#abaaaa";
         currentMode = mode.id;
-        if(mode.id == "driving") {
+        if(mode.id == travelMode.driving) {
           selectedMode = google.maps.DirectionsTravelMode.DRIVING;
         }
-        else if(mode.id == "walking") {
+        else if(mode.id == travelMode.walking) {
           selectedMode = google.maps.DirectionsTravelMode.WALKING;
         }
-        else if(mode.id == "transit") {
+        else if(mode.id == travelMode.transit) {
           selectedMode = google.maps.DirectionsTravelMode.TRANSIT;
         }
         if(searchedPlace != null) {

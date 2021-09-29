@@ -9,19 +9,14 @@
   </head>
   <body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="./constants.js"></script>
     <script src="./app.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZQUNdlvgQ-D6wkz0Z5IlwF5GO47hheso&callback=initMap&libraries=places">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTjqZInEHWvBOVmD9h3C8o_XSImTGxfhI&callback=initMap&libraries=places">
 
     </script>
     <div id="map-section">
-      <div class="info">
-          <p class="main"> 24 rooms | 8 properties | 3 rooms available* </p>
-          <p class="sub"> *Total availability indicated based on confirmed vacancies within next 60 days. </p>
-          <p class="main"> 6 month flexible lease options available </p>
-          <p class="sub"> Hub Location: Liberty Village & King West Area </p>
-      </div>
 
       <div class="map-container">
         <div id="search-box">
@@ -36,10 +31,19 @@
       </div>
       <div class="nearby">
           <div id="explore">
-                <button class="button font" type="button" onclick="showOptions()"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/neighbourhood.png/:/rs=w:1440,h:1440"/> Explore This Hub </button>
+                <button class="button font" type="button" onclick="showOptions()"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/neighbourhood.png/:/rs=w:1440,h:1440" alt="explore"/> Explore This Hub </button>
             </div>
           <div id="categories" class="hidden">
-            <button class="button font" title="Restaurants" type="button" value="restaurant" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Restaurant_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Restaurants </span> </button><button class="button" title="Fitness" type="button" value="gym" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Fitness_Ribbon.png/:/rs=w:1440,h:1440" /><span class="name"> Fitness </span</button><button class="button" type="button" title="Cafe" value="cafe" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Cafe_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Cafe </span></button><button title="Pharmacy" class="button" type="button" value="pharmacy" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Pharma_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Pharmacy </span></button><button class="button" title="Hospital" type="button" value="hospital" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Hospital_Ribbon.png/:/rs=w:1440,h:1440" /><span class="name"> Hospital </span></button><button class="button" title="Grocery" type="button" value="grocery" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Grocery_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Grocery</span> </button><button class="button" type="button" title="Club" value="night club" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Club_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Club</span> </button><button class="button" type="button" title="Cineplex" value="cineplex" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Cinema_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Movie</span> </button><button class="button" type="button" title="Transit" value="TTC" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Transit_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Transit</span> </button><button class="button" title="Clear" type="button" onclick="hideOptions()"> <img src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/back.png/:/rs=w:1440,h:1440" class="icon" /> </button>
+            <button class="button font" title="Restaurants" type="button" value="restaurant" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Restaurant_Ribbon.png/:/rs=w:1440,h:1440" /><span class="name">Restaurants</span></button>
+            <button class="button" title="Fitness" type="button" value="gym" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Fitness_Ribbon.png/:/rs=w:1440,h:1440" /><span class="name"> Fitness </span></button>
+            <button class="button" type="button" title="Cafe" value="cafe" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Cafe_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Cafe </span></button>
+            <button title="Pharmacy" class="button" type="button" value="pharmacy" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Pharma_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Pharmacy </span></button>
+            <button class="button" title="Hospital" type="button" value="hospital" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Hospital_Ribbon.png/:/rs=w:1440,h:1440" /><span class="name"> Hospital </span></button>
+            <button class="button" title="Grocery" type="button" value="grocery" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Grocery_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Grocery</span> </button>
+            <button class="button" type="button" title="Club" value="night club" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Club_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Club</span> </button>
+            <button class="button" type="button" title="Cineplex" value="cineplex" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Cinema_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Movie</span> </button>
+            <button class="button" type="button" title="Transit" value="TTC" onclick="findNearby(this)"><img class="icon" src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/Transit_Ribbon.png/:/rs=w:1440,h:1440" /> <span class="name">Transit</span> </button>
+            <button class="button" title="Clear" type="button" onclick="hideOptions()"> <img src="https://img1.wsimg.com/isteam/ip/68ccf4ad-ee8d-48fa-8ae2-a2ef5fb22f8a/back.png/:/rs=w:1440,h:1440" class="icon" /> </button>
           </div>
       </div>
       <div class="hidden" id="right-panel">
